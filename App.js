@@ -19,7 +19,10 @@ import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
 
+import IconButton from "./components/IconButton";
 import Card from "./components/Card";
+
+import ButtonTypes from './types/buttonTypes';
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -34,6 +37,11 @@ const App = () => {
       <View style={styles.mainContainer}>
         <Card>
           <Text>Get It Done!</Text>
+          <IconButton size={32} type={ButtonTypes.PLUS_ICON} />
+          <IconButton size={32} type={ButtonTypes.MINUS_ICON} />
+          <IconButton size={32} type={ButtonTypes.START_ICON} />
+          <IconButton size={32} type={ButtonTypes.PAUSE_ICON} />
+          <IconButton size={32} type={ButtonTypes.RESET_ICON} />
         </Card>
       </View>
       <View style={styles.bottom}>
