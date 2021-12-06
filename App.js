@@ -26,6 +26,8 @@ import ButtonTypes from './types/buttonTypes';
 
 const App = () => {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [sessionLength, setSessionLength] = useState(25);
+  const [breakLength, setBreakLength] = useState(5);
 
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -43,25 +45,77 @@ const App = () => {
             <Text style={{ fontSize: 28, fontWeight: '600' }}>Session</Text>
             <Text style={{ fontSize: 24, fontWeight: '600' }}>00:00</Text>
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-              {isTimerRunning ? <IconButton size={32} margin={8} type={ButtonTypes.PAUSE_ICON} /> : <IconButton size={32} margin={8} type={ButtonTypes.START_ICON} />}
-              <IconButton size={32} margin={8} type={ButtonTypes.RESET_ICON} />
+              {isTimerRunning ?
+                <IconButton
+                  size={32}
+                  margin={8}
+                  type={ButtonTypes.PAUSE_ICON}
+                  onPress={() => {
+                    setIsTimerRunning(false);
+                  }}
+                /> :
+                <IconButton
+                  size={32}
+                  margin={8}
+                  type={ButtonTypes.START_ICON}
+                  onPress={() => {
+                    setIsTimerRunning(true);
+                  }}
+                />
+              }
+              <IconButton
+                size={32}
+                margin={8}
+                type={ButtonTypes.RESET_ICON}
+                onPress={() => {
+                  setIsTimerRunning(false);
+                }}
+              />
             </View>
           </Card>
           <View style={{ flexDirection: "row" }}>
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Session Length</Text>
               <View style={styles.timeChanger}>
-                <IconButton size={32} type={ButtonTypes.MINUS_ICON} />
-                <Text style={styles.timeChangerText}>25</Text>
-                <IconButton size={32} type={ButtonTypes.PLUS_ICON} />
+                <IconButton
+                  size={32}
+                  type={ButtonTypes.MINUS_ICON}
+                  onPress={() => {
+                    if (sessionLength > 1) {
+                      setSessionLength(sessionLength - 1);
+                    }
+                  }}
+                />
+                <Text style={styles.timeChangerText}>{sessionLength}</Text>
+                <IconButton
+                  size={32}
+                  type={ButtonTypes.PLUS_ICON}
+                  onPress={() => {
+                    setSessionLength(sessionLength + 1);
+                  }}
+                />
               </View>
             </View>
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Break Length</Text>
               <View style={styles.timeChanger}>
-                <IconButton size={32} type={ButtonTypes.MINUS_ICON} />
-                <Text style={styles.timeChangerText}>5</Text>
-                <IconButton size={32} type={ButtonTypes.PLUS_ICON} />
+                <IconButton
+                  size={32}
+                  type={ButtonTypes.MINUS_ICON}
+                  onPress={() => {
+                    if (breakLength > 1) {
+                      setBreakLength(breakLength - 1);
+                    }
+                  }}
+                />
+                <Text style={styles.timeChangerText}>{breakLength}</Text>
+                <IconButton
+                  size={32}
+                  type={ButtonTypes.PLUS_ICON}
+                  onPress={() => {
+                    setBreakLength(breakLength + 1);
+                  }}
+                />
               </View>
             </View>
           </View>
