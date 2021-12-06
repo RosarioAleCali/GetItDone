@@ -11,8 +11,9 @@ import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
 
-import IconButton from "./components/IconButton";
 import Card from "./components/Card";
+import Footer from './components/Footer';
+import IconButton from "./components/IconButton";
 
 import ButtonTypes from './types/buttonTypes';
 
@@ -113,9 +114,7 @@ const App = () => {
           </View>
         </Card>
       </View>
-      <View style={styles.bottom}>
-        <Text>Developed with ❤️ by Kalamos Technologies</Text>
-      </View>
+      <Footer />
     </SafeAreaView>
   );
 };
