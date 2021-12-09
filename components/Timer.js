@@ -1,5 +1,6 @@
 import React from "react";
 import { Text, View } from "react-native";
+import PropTypes from "prop-types";
 
 import Card from "./Card";
 import IconButton from "./IconButton";
@@ -42,3 +43,11 @@ export default function Timer({ isTimerRunning, handleResetButton, setIsTimerRun
     </Card>
   );
 }
+
+Timer.propTypes = {
+  isTimerRunning: PropTypes.bool.isRequired,
+  handleResetButton: PropTypes.func.isRequired,
+  setIsTimerRunning: PropTypes.func.isRequired,
+  time: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+};

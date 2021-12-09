@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Svg, { Line, Path } from "react-native-svg";
+import PropTypes from "prop-types";
 
 import ButtonTypes from "../types/buttonTypes";
 
@@ -102,3 +103,31 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
 });
+
+PlusIcon.propTypes = {
+  size: PropTypes.number.isRequired,
+};
+
+MinusIcon.propTypes = {
+  size: PropTypes.number.isRequired,
+};
+
+StartIcon.propTypes = {
+  size: PropTypes.number.isRequired,
+};
+
+PauseIcon.propTypes = {
+  size: PropTypes.number.isRequired,
+};
+
+ResetIcon.propTypes = {
+  size: PropTypes.number.isRequired,
+};
+
+IconButton.propTypes = {
+  disabled: PropTypes.bool,
+  margin: PropTypes.number,
+  onPress: PropTypes.func.isRequired,
+  size: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired
+};
