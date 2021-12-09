@@ -120,12 +120,14 @@ export default function PomodoroTimer() {
         </Card>
         <View style={{ flexDirection: "row" }}>
           <TimeChanger
+            disabled={isTimerRunning}
             onMinusPress={handleSessionTimeDecrease}
             onPlusPress={handleSessionTimeIncrease}
             time={sessionLength}
             title={"Session Length"}
           />
           <TimeChanger
+            disabled={isTimerRunning}
             onMinusPress={handleBreakDecrease}
             onPlusPress={handleBreakIncrease}
             time={breakLength}

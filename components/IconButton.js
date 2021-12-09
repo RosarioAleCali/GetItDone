@@ -75,15 +75,17 @@ function renderIcon(size, type) {
   }
 }
 
-export default function IconButton({ margin, onPress, size, type }) {
+export default function IconButton({ disabled, margin, onPress, size, type }) {
   return (
     <TouchableOpacity
       onPress={onPress}
+      disabled={disabled}
       style={{
         ...styles.appButtonContainer,
         width: size,
         height: size,
-        marginHorizontal: margin
+        marginHorizontal: margin,
+        opacity: disabled? 0.2 : 1,
       }}
     >
       <View style={{ width: size, height: size }}>
