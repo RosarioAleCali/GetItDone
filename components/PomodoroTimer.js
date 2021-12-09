@@ -5,6 +5,7 @@ import {
   Vibration,
   View,
 } from 'react-native';
+import { Notifications } from 'react-native-notifications';
 
 import Card from "./Card";
 import Timer from './Timer';
@@ -17,7 +18,11 @@ export default function PomodoroTimer() {
   const [time, setTime] = useState(sessionLength * 60);
   const [timerType, setTimerType] = useState("Session");
 
-  const VIBRATION_PATTERN = [ 1000, 2000, 3000 ];
+  const VIBRATION_PATTERN = [1000, 2000, 3000];
+
+  useEffect(() => {
+    registerNotifications();
+  }, []);
 
   useEffect(() => {
     let timer = null;
@@ -30,6 +35,19 @@ export default function PomodoroTimer() {
 
     return () => clearTimeout(timer);
   }, [isTimerRunning, time]);
+
+  function registerNotifications() {
+    // Request permissions on iOS, refresh token on Android
+    Notifications.registerRemoteNotifications();
+
+    Notifications.events().registerRemoteNotificationsRegistered((event) => {
+      // TO-DO: Send the token to my server so it could send back push notifications...
+      console.log("Device Token Received", event.deviceToken);
+    });
+    Notifications.events().registerRemoteNotificationsRegistrationFailed((event) => {
+      // console.error(event);
+    });
+  }
 
   function handleResetButton() {
     setIsTimerRunning(false);
@@ -81,6 +99,20 @@ export default function PomodoroTimer() {
     }
   }
 
+  function alertUser() {
+    Vibration.vibrate(VIBRATION_PATTERN);
+
+    const date = new Date(Date.now() + 1000);
+    const notification = {
+      title: "Get It Done!",
+      body: `Your ${timerType} has begun!`,
+      silent: false,
+      userInfo: {},
+      fireDate: date.toISOString(),
+    };
+    Notifications.postLocalNotification(notification);
+  }
+
   function handleTimer() {
     let newTimerType = "";
     let newTime = time - 1;
@@ -92,10 +124,10 @@ export default function PomodoroTimer() {
       newTimerType = timerType === "Session" ? "Break" : "Session";
       newTime = newTimerType === "Session" ? (sessionLength * 60) : (breakLength * 60);
 
-      Vibration.vibrate(VIBRATION_PATTERN);
-
       setTimerType(newTimerType);
       setTime(newTime);
+
+      alertUser();
     }
   }
 
