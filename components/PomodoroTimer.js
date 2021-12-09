@@ -7,6 +7,7 @@ import {
 
 import Card from "./Card";
 import IconButton from "./IconButton";
+import SetTimeLengthSection from './SetTimeLengthSection';
 
 import ButtonTypes from '../types/buttonTypes';
 
@@ -118,38 +119,18 @@ export default function PomodoroTimer() {
           </View>
         </Card>
         <View style={{ flexDirection: "row" }}>
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Session Length</Text>
-            <View style={styles.timeChanger}>
-              <IconButton
-                size={32}
-                type={ButtonTypes.MINUS_ICON}
-                onPress={handleSessionTimeDecrease}
-              />
-              <Text style={styles.timeChangerText}>{sessionLength}</Text>
-              <IconButton
-                size={32}
-                type={ButtonTypes.PLUS_ICON}
-                onPress={handleSessionTimeIncrease}
-              />
-            </View>
-          </View>
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Break Length</Text>
-            <View style={styles.timeChanger}>
-              <IconButton
-                size={32}
-                type={ButtonTypes.MINUS_ICON}
-                onPress={handleBreakDecrease}
-              />
-              <Text style={styles.timeChangerText}>{breakLength}</Text>
-              <IconButton
-                size={32}
-                type={ButtonTypes.PLUS_ICON}
-                onPress={handleBreakIncrease}
-              />
-            </View>
-          </View>
+          <SetTimeLengthSection
+            onMinusPress={handleSessionTimeDecrease}
+            onPlusPress={handleSessionTimeIncrease}
+            time={sessionLength}
+            title={"Session Length"}
+          />
+          <SetTimeLengthSection
+            onMinusPress={handleBreakDecrease}
+            onPlusPress={handleBreakIncrease}
+            time={breakLength}
+            title={"Break Length"}
+          />
         </View>
       </Card>
     </View>
@@ -161,30 +142,5 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
-  },
-  bottom: {
-    justifyContent: 'flex-end',
-    marginTop: 18,
-    alignItems: 'center'
-  },
-  timeChanger: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 8
-  },
-  timeChangerText: {
-    marginHorizontal: 6,
-    fontSize: 24,
-    fontWeight: '600'
-  },
-  section: {
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 16
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: '700'
   }
 });
