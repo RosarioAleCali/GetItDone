@@ -117,7 +117,7 @@ export default function PomodoroTimer() {
     let newTimerType = "";
     let newTime = time - 1;
 
-    if (newTime > 0) {
+    if (newTime >= 0) {
       setTime(newTime);
     }
     else {
