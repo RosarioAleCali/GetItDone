@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,6 +14,72 @@ export default function PomodoroTimer() {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [sessionLength, setSessionLength] = useState(25);
   const [breakLength, setBreakLength] = useState(5);
+  const [time, setTime] = useState(sessionLength * 60);
+  const [timerType, setTimerType] = useState("Session");
+
+  useEffect(() => {
+    let interval = null;
+
+    if (isTimerRunning) {
+      interval = setInterval(() => {
+        setTime(time => time - 1);
+      }, 1000);
+    } else if (!isTimerRunning && time !== 0) {
+      clearInterval(interval);
+    }
+
+    return () => clearInterval(interval);
+  }, [isTimerRunning]);
+
+  function handleResetButton() {
+    setIsTimerRunning(false);
+    setTimerType("Session");
+    setTime(sessionLength * 60);
+  }
+
+  function handleSessionTimeDecrease() {
+    if (sessionLength > 1) {
+      const newTime = sessionLength - 1;
+
+      setSessionLength(newTime);
+
+      if (timerType === "Session") {
+        setTime(newTime * 60);
+      }
+    }
+  }
+
+  function handleSessionTimeIncrease() {
+    const newTime = sessionLength + 1;
+
+    setSessionLength(newTime);
+
+    if (timerType === "Session") {
+      setTime(newTime * 60);
+    }
+  }
+
+  function handleBreakDecrease() {
+    if (breakLength > 1) {
+      const newTime = breakLength - 1;
+
+      setBreakLength(newTime);
+
+      if (timerType === "Break") {
+        setTime(newTime * 60);
+      }
+    }
+  }
+
+  function handleBreakIncrease() {
+    const newTime = breakLength + 1;
+
+    setBreakLength(newTime);
+
+    if (timerType === "Break") {
+      setTime(newTime * 60);
+    }
+  }
 
   return (
     <View style={styles.mainContainer}>
@@ -21,7 +87,9 @@ export default function PomodoroTimer() {
         <Text style={{ fontSize: 34, fontWeight: '800', textAlign: 'center' }}>Get It Done!</Text>
         <Card>
           <Text style={{ fontSize: 28, fontWeight: '600' }}>Session</Text>
-          <Text style={{ fontSize: 24, fontWeight: '600' }}>00:00</Text>
+          <Text style={{ fontSize: 24, fontWeight: '600' }}>
+            {Math.floor(time / 60).toString().padStart(2, "0") + ":" + (time % 60).toString().padStart(2, "0")}
+          </Text>
           <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
             {isTimerRunning ?
               <IconButton
@@ -45,9 +113,7 @@ export default function PomodoroTimer() {
               size={32}
               margin={8}
               type={ButtonTypes.RESET_ICON}
-              onPress={() => {
-                setIsTimerRunning(false);
-              }}
+              onPress={handleResetButton}
             />
           </View>
         </Card>
@@ -58,19 +124,13 @@ export default function PomodoroTimer() {
               <IconButton
                 size={32}
                 type={ButtonTypes.MINUS_ICON}
-                onPress={() => {
-                  if (sessionLength > 1) {
-                    setSessionLength(sessionLength - 1);
-                  }
-                }}
+                onPress={handleSessionTimeDecrease}
               />
               <Text style={styles.timeChangerText}>{sessionLength}</Text>
               <IconButton
                 size={32}
                 type={ButtonTypes.PLUS_ICON}
-                onPress={() => {
-                  setSessionLength(sessionLength + 1);
-                }}
+                onPress={handleSessionTimeIncrease}
               />
             </View>
           </View>
@@ -80,19 +140,13 @@ export default function PomodoroTimer() {
               <IconButton
                 size={32}
                 type={ButtonTypes.MINUS_ICON}
-                onPress={() => {
-                  if (breakLength > 1) {
-                    setBreakLength(breakLength - 1);
-                  }
-                }}
+                onPress={handleBreakDecrease}
               />
               <Text style={styles.timeChangerText}>{breakLength}</Text>
               <IconButton
                 size={32}
                 type={ButtonTypes.PLUS_ICON}
-                onPress={() => {
-                  setBreakLength(breakLength + 1);
-                }}
+                onPress={handleBreakIncrease}
               />
             </View>
           </View>
