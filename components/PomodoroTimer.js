@@ -11,12 +11,14 @@ import Card from "./Card";
 import Timer from './Timer';
 import TimeChanger from './TimeChanger';
 
+import PomodoroTimerTypes from '../types/pomodoroTimerTypes';
+
 export default function PomodoroTimer() {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [sessionLength, setSessionLength] = useState(25);
   const [breakLength, setBreakLength] = useState(5);
   const [time, setTime] = useState(sessionLength * 60);
-  const [timerType, setTimerType] = useState("Session");
+  const [timerType, setTimerType] = useState(PomodoroTimerTypes.SESSION);
 
   const VIBRATION_PATTERN = [1000, 2000, 3000];
 
@@ -51,7 +53,7 @@ export default function PomodoroTimer() {
 
   function handleResetButton() {
     setIsTimerRunning(false);
-    setTimerType("Session");
+    setTimerType(PomodoroTimerTypes.SESSION);
     setTime(sessionLength * 60);
   }
 
@@ -61,7 +63,7 @@ export default function PomodoroTimer() {
 
       setSessionLength(newTime);
 
-      if (timerType === "Session") {
+      if (timerType === PomodoroTimerTypes.SESSION) {
         setTime(newTime * 60);
       }
     }
@@ -72,7 +74,7 @@ export default function PomodoroTimer() {
 
     setSessionLength(newTime);
 
-    if (timerType === "Session") {
+    if (timerType === PomodoroTimerTypes.SESSION) {
       setTime(newTime * 60);
     }
   }
@@ -83,7 +85,7 @@ export default function PomodoroTimer() {
 
       setBreakLength(newTime);
 
-      if (timerType === "Break") {
+      if (timerType === PomodoroTimerTypes.BREAK) {
         setTime(newTime * 60);
       }
     }
@@ -94,7 +96,7 @@ export default function PomodoroTimer() {
 
     setBreakLength(newTime);
 
-    if (timerType === "Break") {
+    if (timerType === PomodoroTimerTypes.BREAK) {
       setTime(newTime * 60);
     }
   }
@@ -121,8 +123,8 @@ export default function PomodoroTimer() {
       setTime(newTime);
     }
     else {
-      newTimerType = timerType === "Session" ? "Break" : "Session";
-      newTime = newTimerType === "Session" ? (sessionLength * 60) : (breakLength * 60);
+      newTimerType = timerType === PomodoroTimerTypes.SESSION ? PomodoroTimerTypes.BREAK : PomodoroTimerTypes.SESSION;
+      newTime = newTimerType === PomodoroTimerTypes.SESSION ? (sessionLength * 60) : (breakLength * 60);
 
       setTimerType(newTimerType);
       setTime(newTime);
