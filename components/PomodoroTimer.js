@@ -6,10 +6,8 @@ import {
 } from 'react-native';
 
 import Card from "./Card";
-import IconButton from "./IconButton";
+import Timer from './Timer';
 import TimeChanger from './TimeChanger';
-
-import ButtonTypes from '../types/buttonTypes';
 
 export default function PomodoroTimer() {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -86,38 +84,13 @@ export default function PomodoroTimer() {
     <View style={styles.mainContainer}>
       <Card>
         <Text style={{ fontSize: 34, fontWeight: '800', textAlign: 'center' }}>Get It Done!</Text>
-        <Card>
-          <Text style={{ fontSize: 28, fontWeight: '600' }}>Session</Text>
-          <Text style={{ fontSize: 24, fontWeight: '600' }}>
-            {Math.floor(time / 60).toString().padStart(2, "0") + ":" + (time % 60).toString().padStart(2, "0")}
-          </Text>
-          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-            {isTimerRunning ?
-              <IconButton
-                size={32}
-                margin={8}
-                type={ButtonTypes.PAUSE_ICON}
-                onPress={() => {
-                  setIsTimerRunning(false);
-                }}
-              /> :
-              <IconButton
-                size={32}
-                margin={8}
-                type={ButtonTypes.START_ICON}
-                onPress={() => {
-                  setIsTimerRunning(true);
-                }}
-              />
-            }
-            <IconButton
-              size={32}
-              margin={8}
-              type={ButtonTypes.RESET_ICON}
-              onPress={handleResetButton}
-            />
-          </View>
-        </Card>
+        <Timer
+          isTimerRunning={isTimerRunning}
+          handleResetButton={handleResetButton}
+          setIsTimerRunning={setIsTimerRunning}
+          time={time}
+          title={timerType}
+        />
         <View style={{ flexDirection: "row" }}>
           <TimeChanger
             disabled={isTimerRunning}
