@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
+  Vibration,
   View,
 } from 'react-native';
 
@@ -16,19 +17,19 @@ export default function PomodoroTimer() {
   const [time, setTime] = useState(sessionLength * 60);
   const [timerType, setTimerType] = useState("Session");
 
+  const VIBRATION_PATTERN = [ 1000, 2000, 3000 ];
+
   useEffect(() => {
-    let interval = null;
+    let timer = null;
 
     if (isTimerRunning) {
-      interval = setInterval(() => {
-        setTime(time => time - 1);
+      timer = setTimeout(() => {
+        handleTimer();
       }, 1000);
-    } else if (!isTimerRunning && time !== 0) {
-      clearInterval(interval);
     }
 
-    return () => clearInterval(interval);
-  }, [isTimerRunning]);
+    return () => clearTimeout(timer);
+  }, [isTimerRunning, time]);
 
   function handleResetButton() {
     setIsTimerRunning(false);
@@ -77,6 +78,24 @@ export default function PomodoroTimer() {
 
     if (timerType === "Break") {
       setTime(newTime * 60);
+    }
+  }
+
+  function handleTimer() {
+    let newTimerType = "";
+    let newTime = time - 1;
+
+    if (newTime > 0) {
+      setTime(newTime);
+    }
+    else {
+      newTimerType = timerType === "Session" ? "Break" : "Session";
+      newTime = newTimerType === "Session" ? (sessionLength * 60) : (breakLength * 60);
+
+      Vibration.vibrate(VIBRATION_PATTERN);
+
+      setTimerType(newTimerType);
+      setTime(newTime);
     }
   }
 
