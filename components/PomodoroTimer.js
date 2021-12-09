@@ -7,7 +7,7 @@ import {
 
 import Card from "./Card";
 import IconButton from "./IconButton";
-import SetTimeLengthSection from './SetTimeLengthSection';
+import TimeChanger from './TimeChanger';
 
 import ButtonTypes from '../types/buttonTypes';
 
@@ -119,13 +119,13 @@ export default function PomodoroTimer() {
           </View>
         </Card>
         <View style={{ flexDirection: "row" }}>
-          <SetTimeLengthSection
+          <TimeChanger
             onMinusPress={handleSessionTimeDecrease}
             onPlusPress={handleSessionTimeIncrease}
             time={sessionLength}
             title={"Session Length"}
           />
-          <SetTimeLengthSection
+          <TimeChanger
             onMinusPress={handleBreakDecrease}
             onPlusPress={handleBreakIncrease}
             time={breakLength}

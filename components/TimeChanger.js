@@ -5,7 +5,7 @@ import IconButton from "./IconButton";
 
 import ButtonTypes from '../types/buttonTypes';
 
-export default function SetTimeLengthSection({ onMinusPress, onPlusPress, time, title }) {
+export default function TimeChanger({ onMinusPress, onPlusPress, time, title }) {
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>{title}</Text>
