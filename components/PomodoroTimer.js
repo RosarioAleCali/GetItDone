@@ -7,11 +7,27 @@ import {
 } from 'react-native';
 import { Notifications } from 'react-native-notifications';
 
+var Sound = require('react-native-sound');
+
 import Card from "./Card";
 import Timer from './Timer';
 import TimeChanger from './TimeChanger';
 
 import PomodoroTimerTypes from '../types/pomodoroTimerTypes';
+
+Sound.setCategory('Playback');
+
+import seriousStrike from "../assets/serious-strike-533.mp3";
+
+var soundEffect = new Sound(
+  seriousStrike,
+  (error) => {
+    if (error) {
+      console.error('Failed to load the sound', error);
+      return;
+    }
+  },
+);
 
 export default function PomodoroTimer() {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -23,7 +39,11 @@ export default function PomodoroTimer() {
   const VIBRATION_PATTERN = [1000, 2000, 3000];
 
   useEffect(() => {
+    soundEffect.setVolume(1);
+
     registerNotifications();
+
+    return () => soundEffect.release();
   }, []);
 
   useEffect(() => {
@@ -102,6 +122,12 @@ export default function PomodoroTimer() {
   }
 
   function alertUser() {
+    soundEffect.play((success) => {
+      if (!success) {
+        console.error('Playback failed due to soundEffect decoding errors');
+      }
+    });
+
     Vibration.vibrate(VIBRATION_PATTERN);
 
     const date = new Date(Date.now() + 1000);
