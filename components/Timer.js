@@ -7,7 +7,7 @@ import IconButton from "./IconButton";
 
 import ButtonTypes from '../types/buttonTypes';
 
-export default function Timer({ isTimerRunning, handleResetButton, setIsTimerRunning, time, title }) {
+export default function Timer({ isTimerRunning, handleResetButton, handleStartTimer, handlePauseTimer, setIsTimerRunning, time, title }) {
   return (
     <Card>
       <Text style={{ fontSize: 28, fontWeight: '600' }}>{title}</Text>
@@ -22,6 +22,7 @@ export default function Timer({ isTimerRunning, handleResetButton, setIsTimerRun
             type={ButtonTypes.PAUSE_ICON}
             onPress={() => {
               setIsTimerRunning(false);
+              handlePauseTimer();
             }}
           /> :
           <IconButton
@@ -30,6 +31,7 @@ export default function Timer({ isTimerRunning, handleResetButton, setIsTimerRun
             type={ButtonTypes.START_ICON}
             onPress={() => {
               setIsTimerRunning(true);
+              handleStartTimer();
             }}
           />
         }
@@ -37,7 +39,10 @@ export default function Timer({ isTimerRunning, handleResetButton, setIsTimerRun
           size={32}
           margin={8}
           type={ButtonTypes.RESET_ICON}
-          onPress={handleResetButton}
+          onPress={() => {
+            setIsTimerRunning(false);
+            handleResetButton();
+          }}
         />
       </View>
     </Card>
@@ -47,6 +52,8 @@ export default function Timer({ isTimerRunning, handleResetButton, setIsTimerRun
 Timer.propTypes = {
   isTimerRunning: PropTypes.bool.isRequired,
   handleResetButton: PropTypes.func.isRequired,
+  handleStartTimer: PropTypes.func.isRequired,
+  handlePauseTimer: PropTypes.func.isRequired,
   setIsTimerRunning: PropTypes.func.isRequired,
   time: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,

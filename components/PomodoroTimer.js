@@ -5,6 +5,9 @@ import {
   Vibration,
   View,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import BackgroundTimer from 'react-native-background-timer';
+import KeepAwake from 'react-native-keep-awake';
 import { Notifications } from 'react-native-notifications';
 
 var Sound = require('react-native-sound');
@@ -46,17 +49,24 @@ export default function PomodoroTimer() {
     return () => soundEffect.release();
   }, []);
 
-  useEffect(() => {
-    let timer = null;
+  async function onStart() {
+    await AsyncStorage.setItem('start_time', time.toString());
 
-    if (isTimerRunning) {
-      timer = setInterval(() => {
-        handleTimer();
-      }, 1000);
-    }
+    BackgroundTimer.runBackgroundTimer(() => {
+      handleTimer();
+    }, 1000);
+  }
 
-    return () => clearInterval(timer);
-  }, [isTimerRunning, time]);
+  function onPause() {
+    BackgroundTimer.stopBackgroundTimer();
+  }
+
+  function onReset() {
+    setTimerType(PomodoroTimerTypes.SESSION);
+    setTime(sessionLength * 60);
+
+    BackgroundTimer.stopBackgroundTimer();
+  }
 
   function registerNotifications() {
     // Request permissions on iOS, refresh token on Android
@@ -69,12 +79,6 @@ export default function PomodoroTimer() {
     Notifications.events().registerRemoteNotificationsRegistrationFailed((event) => {
       // console.error(event);
     });
-  }
-
-  function handleResetButton() {
-    setIsTimerRunning(false);
-    setTimerType(PomodoroTimerTypes.SESSION);
-    setTime(sessionLength * 60);
   }
 
   function handleSessionTimeDecrease() {
@@ -121,7 +125,7 @@ export default function PomodoroTimer() {
     }
   }
 
-  function alertUser() {
+  async function alertUser() {
     soundEffect.play((success) => {
       if (!success) {
         console.error('Playback failed due to soundEffect decoding errors');
@@ -130,30 +134,37 @@ export default function PomodoroTimer() {
 
     Vibration.vibrate(VIBRATION_PATTERN);
 
+    const _timerType = await AsyncStorage.getItem('timer_type');
     const date = new Date(Date.now() + 1000);
     const notification = {
+      body: `Your ${_timerType.toLowerCase()} has begun!`,
       title: "Get It Done!",
-      body: `Your ${timerType} has begun!`,
-      silent: false,
-      userInfo: {},
       fireDate: date.toISOString(),
     };
     Notifications.postLocalNotification(notification);
   }
 
-  function handleTimer() {
+  async function handleTimer() {
+    const startTime = parseInt(await AsyncStorage.getItem('start_time'));
+
     let newTimerType = "";
-    let newTime = time - 1;
+    let newTime = startTime - 1;
 
     if (newTime >= 0) {
       setTime(newTime);
+      await AsyncStorage.setItem('start_time', newTime.toString());
     }
     else {
-      newTimerType = timerType === PomodoroTimerTypes.SESSION ? PomodoroTimerTypes.BREAK : PomodoroTimerTypes.SESSION;
+      const _timerType = await AsyncStorage.getItem('timer_type');
+      newTimerType = _timerType === PomodoroTimerTypes.SESSION ? PomodoroTimerTypes.BREAK : PomodoroTimerTypes.SESSION;
       newTime = newTimerType === PomodoroTimerTypes.SESSION ? (sessionLength * 60) : (breakLength * 60);
 
+      console.log(newTimerType);
       setTimerType(newTimerType);
       setTime(newTime);
+
+      await AsyncStorage.setItem('timer_type', newTimerType);
+      await AsyncStorage.setItem('start_time', newTime.toString());
 
       alertUser();
     }
@@ -161,11 +172,14 @@ export default function PomodoroTimer() {
 
   return (
     <View style={styles.mainContainer}>
+      {isTimerRunning ? <KeepAwake /> : <></>}
       <Card>
         <Text style={{ fontSize: 34, fontWeight: '800', textAlign: 'center' }}>Get It Done!</Text>
         <Timer
           isTimerRunning={isTimerRunning}
-          handleResetButton={handleResetButton}
+          handleResetButton={onReset}
+          handleStartTimer={onStart}
+          handlePauseTimer={onPause}
           setIsTimerRunning={setIsTimerRunning}
           time={time}
           title={timerType}
