@@ -69,16 +69,10 @@ export default function PomodoroTimer() {
   }
 
   function registerNotifications() {
-    // Request permissions on iOS, refresh token on Android
     Notifications.registerRemoteNotifications();
 
-    Notifications.events().registerRemoteNotificationsRegistered((event) => {
-      // TO-DO: Send the token to my server so it could send back push notifications...
-      console.log("Device Token Received", event.deviceToken);
-    });
-    Notifications.events().registerRemoteNotificationsRegistrationFailed((event) => {
-      // console.error(event);
-    });
+    Notifications.events().registerRemoteNotificationsRegistered(() => { });
+    Notifications.events().registerRemoteNotificationsRegistrationFailed(() => { });
   }
 
   function handleSessionTimeDecrease() {
@@ -159,7 +153,6 @@ export default function PomodoroTimer() {
       newTimerType = _timerType === PomodoroTimerTypes.SESSION ? PomodoroTimerTypes.BREAK : PomodoroTimerTypes.SESSION;
       newTime = newTimerType === PomodoroTimerTypes.SESSION ? (sessionLength * 60) : (breakLength * 60);
 
-      console.log(newTimerType);
       setTimerType(newTimerType);
       setTime(newTime);
 
