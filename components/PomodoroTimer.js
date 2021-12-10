@@ -50,12 +50,12 @@ export default function PomodoroTimer() {
     let timer = null;
 
     if (isTimerRunning) {
-      timer = setTimeout(() => {
+      timer = setInterval(() => {
         handleTimer();
       }, 1000);
     }
 
-    return () => clearTimeout(timer);
+    return () => clearInterval(timer);
   }, [isTimerRunning, time]);
 
   function registerNotifications() {
