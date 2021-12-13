@@ -18,10 +18,12 @@ import TimeChanger from './TimeChanger';
 
 import PomodoroTimerTypes from '../types/pomodoroTimerTypes';
 
-Sound.setCategory('Playback');
-
 import seriousStrike from "../assets/serious-strike-533.mp3";
 
+// Enable playback in silence mode
+Sound.setCategory('Playback');
+
+// Open sound effect file
 var soundEffect = new Sound(
   seriousStrike,
   (error) => {
@@ -52,6 +54,10 @@ export default function PomodoroTimer() {
   async function onStart() {
     await AsyncStorage.setItem('start_time', time.toString());
 
+    // Using the BackgroundTimer from the 'react-native-background-timer' library to run
+    // the timer has a background task.
+    // NOTE: This does not work as wished. Task terminates or goes to sleep after some time.
+    //       Ideally, a better solution is needed.
     BackgroundTimer.runBackgroundTimer(() => {
       handleTimer();
     }, 1000);
@@ -128,6 +134,7 @@ export default function PomodoroTimer() {
 
     Vibration.vibrate(VIBRATION_PATTERN);
 
+    // Construct Notification object and push it locally
     const _timerType = await AsyncStorage.getItem('timer_type');
     const date = new Date(Date.now() + 1000);
     const notification = {
@@ -145,10 +152,12 @@ export default function PomodoroTimer() {
     let newTime = startTime - 1;
 
     if (newTime >= 0) {
+      // Time left is still positive, just need to update the state and the local storage
       setTime(newTime);
       await AsyncStorage.setItem('start_time', newTime.toString());
     }
     else {
+      // Time left for the current session or break has expired, need to switch it up
       const _timerType = await AsyncStorage.getItem('timer_type');
       newTimerType = _timerType === PomodoroTimerTypes.SESSION ? PomodoroTimerTypes.BREAK : PomodoroTimerTypes.SESSION;
       newTime = newTimerType === PomodoroTimerTypes.SESSION ? (sessionLength * 60) : (breakLength * 60);
@@ -165,6 +174,7 @@ export default function PomodoroTimer() {
 
   return (
     <View style={styles.mainContainer}>
+      {/* Keep the screen awake if there is a timer running */}
       {isTimerRunning ? <KeepAwake /> : <></>}
       <Card>
         <Text style={{ fontSize: 34, fontWeight: '800', textAlign: 'center' }}>Get It Done!</Text>

@@ -12,6 +12,7 @@ export default function Timer({ isTimerRunning, handleResetButton, handleStartTi
     <Card>
       <Text style={{ fontSize: 28, fontWeight: '600' }}>{title}</Text>
       <Text style={{ fontSize: 24, fontWeight: '600' }}>
+        {/* Formatting time for human readability */}
         {Math.floor(time / 60).toString().padStart(2, "0") + ":" + (time % 60).toString().padStart(2, "0")}
       </Text>
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
