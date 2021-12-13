@@ -1,21 +1,12 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  useColorScheme,
-} from 'react-native';
-
-import {
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
+import { SafeAreaView } from 'react-native';
 
 import Footer from './components/Footer';
 import PomodoroTimer from './components/PomodoroTimer';
 
 const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: "#F2F2F2",
     flex: 1
   };
 
