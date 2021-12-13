@@ -17,7 +17,7 @@ export default function Timer({ isTimerRunning, handleResetButton, handleStartTi
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         {isTimerRunning ?
           <IconButton
-            size={32}
+            size={36}
             margin={8}
             type={ButtonTypes.PAUSE_ICON}
             onPress={() => {
@@ -26,7 +26,7 @@ export default function Timer({ isTimerRunning, handleResetButton, handleStartTi
             }}
           /> :
           <IconButton
-            size={32}
+            size={36}
             margin={8}
             type={ButtonTypes.START_ICON}
             onPress={() => {
@@ -36,7 +36,7 @@ export default function Timer({ isTimerRunning, handleResetButton, handleStartTi
           />
         }
         <IconButton
-          size={32}
+          size={36}
           margin={8}
           type={ButtonTypes.RESET_ICON}
           onPress={() => {

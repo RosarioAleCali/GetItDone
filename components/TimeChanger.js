@@ -13,14 +13,14 @@ export default function TimeChanger({ disabled, onMinusPress, onPlusPress, time,
       <View style={styles.timeChanger}>
         <IconButton
           disabled={disabled || time === 1}
-          size={32}
+          size={36}
           type={ButtonTypes.MINUS_ICON}
           onPress={onMinusPress}
         />
         <Text style={styles.timeChangerText}>{time}</Text>
         <IconButton
           disabled={disabled}
-          size={32}
+          size={36}
           type={ButtonTypes.PLUS_ICON}
           onPress={onPlusPress}
         />
